@@ -73,7 +73,7 @@
             const drumElement = document.getElementById('drum');
 
             // Update the debug text
-            document.getElementById('debug').textContent = `Sensor Values (Accelerometer): X=${x.toFixed(2)}, Y=${y.toFixed(2)}, Z=${z.toFixed(2)}`;
+           // document.getElementById('debug').textContent = `Sensor Values (Accelerometer): X=${x.toFixed(2)}, Y=${y.toFixed(2)}, Z=${z.toFixed(2)}`;
 
             // Check if acceleration values exceed the threshold to trigger the drum sound
             if (Math.abs(x) > threshold || Math.abs(y) > threshold || Math.abs(z) > threshold) {
