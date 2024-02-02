@@ -44,7 +44,6 @@
         Your browser does not support the audio element.
     </audio>
 
-
     <audio id="tomSound">
         <source src="tom.wav" type="audio/wav">
         Your browser does not support the audio element.
@@ -58,19 +57,15 @@
 
     <script>
         // Function to play drum sound
-        function playDrumSound() {
-            const snareSound = document.getElementById("snareSound");
-           // snareSound.pause();
-            snareSound.play();          
+        function playDrumSound(soundElement) {
+            soundElement.currentTime = 0;
+            soundElement.play();
         }
 
         // Function to handle device motion (accelerometer) change
         function handleMotion(event) {
             // Extract acceleration data
             const { x, y, z } = event.acceleration;
-
-            // Update the debug text
-     //       document.getElementById('debug').textContent = `Sensor Values (Accelerometer): X=${x.toFixed(2)}, Y=${y.toFixed(2)}, Z=${z.toFixed(2)}`;
 
             // Customize the threshold according to your preference
             const threshold = 8;
@@ -82,7 +77,14 @@
             if (Math.abs(x) > threshold || Math.abs(y) > threshold || Math.abs(z) > threshold) {
                 // Change color when threshold is reached
                 drumElement.style.backgroundColor = '#e74c3c';  // Change to a color of your choice
-                playDrumSound(); // Play the drum sound
+                // Determine which drum sound to play based on alpha value
+                if (alpha >= 90 && alpha <= 110) {
+                    playDrumSound(document.getElementById("tomSound"));
+                } else if (alpha >= 30 && alpha <= 50) {
+                    playDrumSound(document.getElementById("floorTomSound"));
+                } else {
+                    playDrumSound(document.getElementById("snareSound"));
+                }
             } else {
                 // Revert to the original color when threshold is not reached
                 drumElement.style.backgroundColor = '#3498db';  // Original color
@@ -104,7 +106,14 @@
             if (Math.abs(alpha) > orientationThreshold || Math.abs(beta) > orientationThreshold || Math.abs(gamma) > orientationThreshold) {
                 // Change color when threshold is reached
                 drumElement.style.backgroundColor = '#2ecc71';  // Change to a color of your choice
-                //playDrumSound(); // Play the drum sound
+                // Determine which drum sound to play based on alpha value
+                if (alpha >= 90 && alpha <= 110) {
+                    playDrumSound(document.getElementById("tomSound"));
+                } else if (alpha >= 30 && alpha <= 50) {
+                    playDrumSound(document.getElementById("floorTomSound"));
+                } else {
+                    playDrumSound(document.getElementById("snareSound"));
+                }
             }
         }
 
@@ -118,7 +127,9 @@
         window.addEventListener('deviceorientation', handleOrientation);
 
         // Add event listener for touch/click to manually trigger sound
-        drumElement.addEventListener('click', playDrumSound);
+        drumElement.addEventListener('click', function () {
+            playDrumSound(document.getElementById("snareSound"));
+        });
     </script>
 </body>
 </html>
