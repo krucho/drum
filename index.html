@@ -77,6 +77,7 @@
             if (Math.abs(x) > threshold || Math.abs(y) > threshold || Math.abs(z) > threshold) {
                 // Change color when threshold is reached
                 drumElement.style.backgroundColor = '#e74c3c';  // Change to a color of your choice
+
                 // Determine which drum sound to play based on alpha value
                 if (alpha >= 90 && alpha <= 110) {
                     playDrumSound(document.getElementById("tomSound"));
@@ -91,40 +92,11 @@
             }
         }
 
-        // Function to handle device orientation change
-        function handleOrientation(event) {
-            // Extract orientation data
-            const { alpha, beta, gamma } = event;
-
-            // Update the debug text
-            document.getElementById('debug').textContent = `Sensor Values (Orientation): Alpha=${alpha.toFixed(2)}, Beta=${beta.toFixed(2)}, Gamma=${gamma.toFixed(2)}`;
-
-            // Customize the threshold according to your preference
-            const orientationThreshold = 30;
-
-            // Check if orientation values exceed the threshold to trigger the drum sound
-            if (Math.abs(alpha) > orientationThreshold || Math.abs(beta) > orientationThreshold || Math.abs(gamma) > orientationThreshold) {
-                // Change color when threshold is reached
-                drumElement.style.backgroundColor = '#2ecc71';  // Change to a color of your choice
-                // Determine which drum sound to play based on alpha value
-                if (alpha >= 90 && alpha <= 110) {
-                    //playDrumSound(document.getElementById("tomSound"));
-                } else if (alpha >= 30 && alpha <= 50) {
-                    //playDrumSound(document.getElementById("floorTomSound"));
-                } else {
-                    //playDrumSound(document.getElementById("snareSound"));
-                }
-            }
-        }
-
         // Get the #drum element
         const drumElement = document.getElementById('drum');
 
         // Add event listener for device motion (accelerometer)
         window.addEventListener('devicemotion', handleMotion);
-
-        // Add event listener for device orientation
-        window.addEventListener('deviceorientation', handleOrientation);
 
         // Add event listener for touch/click to manually trigger sound
         drumElement.addEventListener('click', function () {
