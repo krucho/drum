@@ -39,26 +39,17 @@
 <body>
     <div id="drum">Tap Me</div>
     <div id="debug">Sensor Values:</div>
+      <audio id="snareSound">
+    <source src="snare.wav" type="audio/wav">
+    Your browser does not support the audio element.
+  </audio>
+
 
     <script>
         // Function to play drum sound
         function playDrumSound() {
-            // Create an audio context
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-            // Load the snare sound
-            fetch('snare.wav')
-                .then(response => response.arrayBuffer())
-                .then(buffer => {
-                    // Create a buffer source
-                    const source = audioContext.createBufferSource();
-                    audioContext.decodeAudioData(buffer, (decodedData) => {
-                        source.buffer = decodedData;
-                        source.connect(audioContext.destination);
-                        source.start(0);
-                    });
-                })
-                .catch(error => console.error('Error loading sound:', error));
+            const snareSound = document.getElementById("snareSound");
+            snareSound.play();          
         }
 
         // Function to handle device motion (accelerometer) change
