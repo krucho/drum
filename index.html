@@ -39,10 +39,21 @@
 <body>
     <div id="drum">Tap Me</div>
     <div id="debug">Sensor Values:</div>
-      <audio id="snareSound">
-    <source src="snare.wav" type="audio/wav">
-    Your browser does not support the audio element.
-  </audio>
+    <audio id="snareSound">
+        <source src="snare.wav" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+
+
+    <audio id="tomSound">
+        <source src="tom.wav" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+
+    <audio id="floorTomSound">
+        <source src="floorTom.wav" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
 
 
     <script>
@@ -59,7 +70,7 @@
             const { x, y, z } = event.acceleration;
 
             // Update the debug text
-            document.getElementById('debug').textContent = `Sensor Values: X=${x.toFixed(2)}, Y=${y.toFixed(2)}, Z=${z.toFixed(2)}`;
+            document.getElementById('debug').textContent = `Sensor Values (Accelerometer): X=${x.toFixed(2)}, Y=${y.toFixed(2)}, Z=${z.toFixed(2)}`;
 
             // Customize the threshold according to your preference
             const threshold = 8;
@@ -78,11 +89,36 @@
             }
         }
 
+        // Function to handle device orientation change
+        function handleOrientation(event) {
+            // Extract orientation data
+            const { alpha, beta, gamma } = event;
+
+            // Update the debug text
+            document.getElementById('debug').textContent = `Sensor Values (Orientation): Alpha=${alpha.toFixed(2)}, Beta=${beta.toFixed(2)}, Gamma=${gamma.toFixed(2)}`;
+
+            // Customize the threshold according to your preference
+            const orientationThreshold = 30;
+
+            // Check if orientation values exceed the threshold to trigger the drum sound
+            if (Math.abs(alpha) > orientationThreshold || Math.abs(beta) > orientationThreshold || Math.abs(gamma) > orientationThreshold) {
+                // Change color when threshold is reached
+                drumElement.style.backgroundColor = '#2ecc71';  // Change to a color of your choice
+                //playDrumSound(); // Play the drum sound
+            }
+        }
+
+        // Get the #drum element
+        const drumElement = document.getElementById('drum');
+
         // Add event listener for device motion (accelerometer)
         window.addEventListener('devicemotion', handleMotion);
 
+        // Add event listener for device orientation
+       // window.addEventListener('deviceorientation', handleOrientation);
+
         // Add event listener for touch/click to manually trigger sound
-        document.getElementById('drum').addEventListener('click', playDrumSound);
+        drumElement.addEventListener('click', playDrumSound);
     </script>
 </body>
 </html>
