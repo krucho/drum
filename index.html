@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drum Simulator</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        #drum {
+            width: 100px;
+            height: 100px;
+            background-color: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            transition: background-color 0.5s;
+            margin-bottom: 20px;
+        }
+
+        #debug {
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="drum">Tap Me</div>
+    <div id="debug">Sensor Values:</div>
+
+    <script>
+        // Function to play drum sound
+        function playDrumSound() {
+            // Create an audio context
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+            // Load the snare sound
+            fetch('snare.wav')
+                .then(response => response.arrayBuffer())
+                .then(buffer => {
+                    // Create a buffer source
+                    const source = audioContext.createBufferSource();
+                    audioContext.decodeAudioData(buffer, (decodedData) => {
+                        source.buffer = decodedData;
+                        source.connect(audioContext.destination);
+                        source.start(0);
+                    });
+                })
+                .catch(error => console.error('Error loading sound:', error));
+        }
+
+        // Function to handle device motion (accelerometer) change
+        function handleMotion(event) {
+            // Extract acceleration data
+            const { x, y, z } = event.acceleration;
+
+            // Update the debug text
+            document.getElementById('debug').textContent = `Sensor Values: X=${x.toFixed(2)}, Y=${y.toFixed(2)}, Z=${z.toFixed(2)}`;
+
+            // Customize the threshold according to your preference
+            const threshold = 10;
+
+            // Get the #drum element
+            const drumElement = document.getElementById('drum');
+
+            // Check if acceleration values exceed the threshold to trigger the drum sound
+            if (Math.abs(x) > threshold || Math.abs(y) > threshold || Math.abs(z) > threshold) {
+                // Change color when threshold is reached
+                drumElement.style.backgroundColor = '#e74c3c';  // Change to a color of your choice
+                playDrumSound(); // Play the drum sound
+            } else {
+                // Revert to the original color when threshold is not reached
+                drumElement.style.backgroundColor = '#3498db';  // Original color
+            }
+        }
+
+        // Add event listener for device motion (accelerometer)
+        window.addEventListener('devicemotion', handleMotion);
+
+        // Add event listener for touch/click to manually trigger sound
+        document.getElementById('drum').addEventListener('click', playDrumSound);
+    </script>
+</body>
+</html>
