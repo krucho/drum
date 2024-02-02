@@ -60,7 +60,7 @@
         // Function to play drum sound
         function playDrumSound() {
             const snareSound = document.getElementById("snareSound");
-            snareSound.pause();
+           // snareSound.pause();
             snareSound.play();          
         }
 
@@ -115,7 +115,7 @@
         window.addEventListener('devicemotion', handleMotion);
 
         // Add event listener for device orientation
-       // window.addEventListener('deviceorientation', handleOrientation);
+        window.addEventListener('deviceorientation', handleOrientation);
 
         // Add event listener for touch/click to manually trigger sound
         drumElement.addEventListener('click', playDrumSound);
