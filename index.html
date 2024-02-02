@@ -60,7 +60,7 @@
         // Function to play drum sound
         function playDrumSound() {
             const snareSound = document.getElementById("snareSound");
-            //snareSound.stop();
+            snareSound.pause();
             snareSound.play();          
         }
 
@@ -70,7 +70,7 @@
             const { x, y, z } = event.acceleration;
 
             // Update the debug text
-            document.getElementById('debug').textContent = `Sensor Values (Accelerometer): X=${x.toFixed(2)}, Y=${y.toFixed(2)}, Z=${z.toFixed(2)}`;
+     //       document.getElementById('debug').textContent = `Sensor Values (Accelerometer): X=${x.toFixed(2)}, Y=${y.toFixed(2)}, Z=${z.toFixed(2)}`;
 
             // Customize the threshold according to your preference
             const threshold = 8;
