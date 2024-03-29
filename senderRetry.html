@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Client</title>
+</head>
+<body>
+  <h1>WebSocket Client</h1>
+  <input type="text" id="messageInput" placeholder="Type a message">
+  <button onclick="sendMessage()">Send</button>
+  <br>
+  <br>
+  <button onclick="sendPlay()">Play</button>
+  <br>
+  <br>
+  <button onclick="sendStop()">Stop</button>
+
+  <!-- Container to display received messages -->
+  <div id="messageContainer"></div>
+
+  <script>
+    let socket;
+
+    function connect() {
+      //socket = new WebSocket('ws://192.168.0.8:8080');
+socket = new WebSocket('ws://websockets.brightmoments.io/');
+      socket.addEventListener('open', (event) => {
+        console.log('WebSocket connection opened:', event);
+      });
+
+      socket.addEventListener('message', (event) => {
+        console.log('Received:', event.data);
+
+        // Check if the received data is a Blob
+        if (event.data instanceof Blob) {
+          // Convert Blob to a readable format (assuming it's a text)
+          event.data.text().then((text) => {
+            appendMessage(text); // Append the text content of the Blob
+          });
+        } else {
+          appendMessage(event.data); // Append the received data directly
+        }
+      });
+
+      socket.addEventListener('close', (event) => {
+        console.log('WebSocket connection closed. Reconnecting...');
+        setTimeout(connect, 5000); // Attempt to reconnect after 5 seconds
+      });
+    }
+
+    connect(); // Connect to the WebSocket server initially
+
+    function appendMessage(message) {
+      // Append received message to the message container
+      const messageContainer = document.getElementById('messageContainer');
+      messageContainer.innerHTML += `<div>${message}</div>`;
+    }
+
+    function sendMessage() {
+      const messageInput = document.getElementById('messageInput');
+      const message = messageInput.value;
+      socket.send(message);
+      messageInput.value = '';
+    }
+
+    function sendPlay() {
+      socket.send("play");
+    }
+
+    function sendStop() {
+      socket.send("stop");
+    }
+  </script>
+</body>
+</html>
