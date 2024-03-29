@@ -24,7 +24,7 @@
 
     function connect() {
       //socket = new WebSocket('ws://192.168.0.8:8080');
-socket = new WebSocket('wss://websockets.brightmoments.io/');
+socket = new WebSocket('wss://websockets.brightmoments.io');
       socket.addEventListener('open', (event) => {
         console.log('WebSocket connection opened:', event);
       });
