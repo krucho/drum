@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFC Reader</title>
+</head>
+<body>
+    <h1>NFC Reader Example</h1>
+    <button id="readButton">Read NFC Tag</button>
+    <p id="output">No data read yet.</p>
+
+    <script>
+        document.getElementById('readButton').addEventListener('click', async () => {
+            if ('NDEFReader' in window) {
+                try {
+                    const ndef = new NDEFReader();
+                    await ndef.scan();
+                    ndef.onreading = event => {
+                        const message = event.message;
+                        for (const record of message.records) {
+                            if (record.recordType === 'text') {
+                                const textDecoder = new TextDecoder(record.encoding);
+                                const text = textDecoder.decode(record.data);
+                                document.getElementById('output').innerText = `Text from NFC tag: ${text}`;
+                            }
+                        }
+                    };
+                } catch (error) {
+                    console.log('Error reading NFC tag:', error);
+                    document.getElementById('output').innerText = 'Error reading NFC tag.';
+                }
+            } else {
+                document.getElementById('output').innerText = 'Web NFC is not supported on this device.';
+            }
+        });
+    </script>
+</body>
+</html>
